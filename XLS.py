@@ -1,31 +1,44 @@
 import calendar
 import datetime
-from openpyxl import Workbook
-from openpyxl.styles import Font
+from openpyxl.workbook import Workbook
+from openpyxl.styles import Font, Alignment
+from openpyxl.utils import get_column_letter
+import data
+
 
 def month_to_csv(year=2021, month=1):
     """
+    :param year: pobiera rok
     :param month: pobiera wartość miesiąca od 1 do 12
-    :return: zwraca plik z tabelą z podanym miesiącem
+    :returns: zwraca plik z tabelą z podanym miesiącem
     """
-    file_name = 'grafik.xls'
-    path = r'/home/filip/Pulpit/PythonZ/Projekt - grafik/'
     wb = Workbook()
     ws = wb.active
-    xls_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-                'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE']
-    list = []
+    list_of_days = []
     cal1 = calendar.Calendar()
+
     for day in cal1.itermonthdays2(year, month):
         if day[0] == 0:
             continue
-        list.append(day)
-    length_of_the_month = len(list)
+        list_of_days.append(day)
+
+    ws.row_dimensions[1].height = 30
+
     i = 0
-    while i != length_of_the_month:
-        ws['{}1'.format(xls_list[i])] = str(datetime.date(year, month, list[i][0]))
-        if list[i][1] == 5 or list[i][1] == 6:
-            ws['{}1'.format(xls_list[i])].font = Font(color="FF0000", bold=True)
+    while i != len(list_of_days):
+        ws.cell(column=i+1, row=2, value=str(datetime.date(year, month, list_of_days[i][0]))).alignment = Alignment(
+            horizontal='center', vertical='center')
+        if list_of_days[i][1] == 5 or list_of_days[i][1] == 6:
+            ws.cell(column=i+1, row=2).font = Font(color="FF0000", bold=True)
+            ws.cell(column=i+1, row=2).alignment = Alignment(horizontal='center', vertical='center')
+        # ws.column_dimensions["b"].bestFit = True
+
+        ws.column_dimensions.group(get_column_letter(1), get_column_letter(len(list_of_days)))
+        ws.column_dimensions.width = 30
         i += 1
-    wb.save(file_name)
-    pass
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(list_of_days))
+    ws.cell(column=1, row=1, value=data.month_list[month-1]).font = Font(bold=True, size=20)
+    ws.cell(column=1, row=1).alignment = Alignment(horizontal='center', vertical='center')
+
+
+    return wb
