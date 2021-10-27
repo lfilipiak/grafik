@@ -1,3 +1,4 @@
 *.xls
 *.xlsx
 **/__pychache__/
+*.db
