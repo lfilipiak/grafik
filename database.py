@@ -7,7 +7,6 @@ employers_db = mysql.connector.connect(
     database='Workers'
 )
 
-
 my_cursor = employers_db.cursor()
 
 # my_cursor.execute("CREATE DATABASE Workers")
@@ -22,7 +21,8 @@ my_cursor = employers_db.cursor()
 
 my_cursor.execute("SELECT * FROM Persons")
 
-myresult = my_cursor.fetchall()
+my_result = my_cursor.fetchall()
+print(my_result)
 
-for x in myresult:
-    print(x[2])
+# for x in myresult:
+#     print(x[2])

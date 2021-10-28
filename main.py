@@ -11,6 +11,7 @@ from openpyxl import load_workbook
 from openpyxl import formatting
 from data import month_list, path
 import os
+from openpyxl import writer
 
 
 def add_work_schedule():
@@ -22,17 +23,22 @@ def add_work_schedule():
         print("taki grafik już istnieje!")
     pass
 
-add_work_schedule()
-
 def add_worker():
     x = input("Podaj imię pracownika: ")
     y = input("Podaj nazwisko pracownika: ")
-    z = int(input("Podaj id pracownika: "))
-    worker = Employers(x, y, z)
+    worker = Employers(x, y)
     worker.add_worker()
     pass
 
-# add_worker()
+
+add_worker()
+add_work_schedule()
+
+
+
+
+
+
 
 # def open_worbook(path):
 #     workbook = load_workbook(filename=path)
