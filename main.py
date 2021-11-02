@@ -7,21 +7,20 @@ wystarczającej ilości osób.
 
 import XLS
 from employers import Employers
-from openpyxl import load_workbook
-from openpyxl import formatting
 from data import month_list, path
 import os
-from openpyxl import writer
+import database
 
 
 def add_work_schedule():
     year = int(input("Podaj rok: "))
     month = int(input("Podaj miesiąc: "))
     if not os.path.isfile(path + '{} {}.xlsx'.format(year, month_list[month - 1])):
-        XLS.month_to_csv().save('{} {}.xlsx'.format(year, month_list[month - 1]))
+        XLS.month_to_csv(year=year, month=month).save('{} {}.xlsx'.format(year, month_list[month - 1]))
     else:
         print("taki grafik już istnieje!")
     pass
+
 
 def add_worker():
     x = input("Podaj imię pracownika: ")
@@ -31,27 +30,40 @@ def add_worker():
     pass
 
 
-add_worker()
-add_work_schedule()
+def delete_worker():
+    last_name = input("Podaj nazwisko pracownika do usunięcia: ")
+    sql = "DELETE FROM Persons WHERE last_name = %s"
+    val = (last_name,)
+    database.my_cursor.execute(sql, val)
+    database.employers_db.commit()
+    print(database.my_cursor.rowcount, "record deleted.")
+    pass
+
+
+def _list_of_workers():
+    list_of_workers = []
+
+    pass
+
+
+# def delete_worker():
+#     x = input("Podaj nazwisko pracownika do usunięcia: ")
+
+
+def menu():
+    print("1. Utwórz grafik\n2. Dodaj pracownika\n3. Edytuj grafik")
+    choice = int(input())
+    match choice:
+        case 1:
+            add_work_schedule()
+        case 2:
+            add_worker()
+        case 3:
+            pass
+    pass
 
 
 
-
-
-
-
-# def open_worbook(path):
-#     workbook = load_workbook(filename=path)
-#     print("Worksheet names: {}".format(workbook.sheetnames))
-#     sheet = workbook.active
-#     print(sheet)
-#     print("The title of the Worksheet is: {}".format(sheet.title))
-
-
-# def employer():
-#     return
-
-
-# xls.save(file_name)
-
-# open_worbook(file_name)
+delete_worker()
+# print("WYBIERZ FUNKCJĘ:")
+# menu()

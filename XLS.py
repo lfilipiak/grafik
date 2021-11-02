@@ -5,10 +5,10 @@ from openpyxl.styles import Font, Alignment
 from openpyxl.utils import get_column_letter
 import data
 import database
-from openpyxl import load_workbook
+# from openpyxl import load_workbook
 
 
-def month_to_csv(year=2021, month=1):
+def month_to_csv(year, month):
     """
     :param year: pobiera rok
     :param month: pobiera wartość miesiąca od 1 do 12
@@ -45,7 +45,6 @@ def month_to_csv(year=2021, month=1):
     database.my_cursor.execute("SELECT * FROM Persons")
     workers = database.my_cursor.fetchall()
     for i in range(len(workers)):
-        # j = i
         a = int(3 + 7 * i)
         b = int(8 + 7 * i)
         merge_a = 'A{}:A{}'.format(a, b)
