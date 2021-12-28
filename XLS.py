@@ -5,6 +5,8 @@ from openpyxl.styles import Font, Alignment
 from openpyxl.utils import get_column_letter
 import data
 import database
+
+
 # from openpyxl import load_workbook
 
 
@@ -44,6 +46,7 @@ def month_to_csv(year, month):
 
     database.my_cursor.execute("SELECT * FROM Persons")
     workers = database.my_cursor.fetchall()
+    id = 1
     for i in range(len(workers)):
         a = int(3 + 7 * i)
         b = int(8 + 7 * i)
@@ -51,22 +54,12 @@ def month_to_csv(year, month):
         merge_b = 'B{}:B{}'.format(a, b)
         ws.merge_cells(merge_a)
         ws.merge_cells(merge_b)
-        ws.cell(column=1, row=a, value=workers[i][0]).alignment = Alignment(
+        ws.cell(column=1, row=a, value=id).alignment = Alignment(
             horizontal='center', vertical='center')
         ws.column_dimensions[get_column_letter(1)].width = 5
         ws.column_dimensions[get_column_letter(1)].bestFit = True
         ws.cell(a, 2, value='{} {}'.format(workers[i][1], workers[i][2]))
         ws.cell(a, 2).alignment = Alignment(horizontal='center', vertical='center')
         ws.column_dimensions[get_column_letter(2)].width = 20
+        id += 1
     return wb
-
-# def workers_in_worksheet(file_name):
-#     wb = load_workbook(filename=file_name)
-#     ws = wb.active
-#     database.my_cursor.execute("SELECT * FROM Persons")
-#     workers = database.my_cursor.fetchall()
-#     for i in range(len(workers)):
-#         ws.merge_cells(start_row=3 + 6 * i, start_column=1, end_row=9 + 6 * i, end_column=1)
-#         ws.cell(column=1, row=3 + 6 * i, value="{} {}".format(workers[i][1], workers[i][2])).alignment = Alignment(
-#             horizontal='center', vertical='center')
-#     return wb

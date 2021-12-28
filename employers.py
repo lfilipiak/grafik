@@ -13,9 +13,9 @@ class Employers:
         pass
 
     def add_worker(self):
-        database.my_cursor.execute("SELECT * FROM Persons")
-        sql = "INSERT INTO Persons (id, name, last_name) VALUES (%s, %s, %s)"
-        val = (database.my_cursor.fetchall()[-1][0] + 1, self.name, self.last_name)
+        # database.my_cursor.execute("SELECT * FROM Persons")
+        sql = "INSERT INTO Persons (name, last_name) VALUES (%s, %s)"
+        val = (self.name, self.last_name)
         database.my_cursor.execute(sql, val)
         database.employers_db.commit()
         print(database.my_cursor.rowcount, "record inserted.")
@@ -28,7 +28,6 @@ class Employers:
         pass
 
     def _list_of_workers(self):
-
         pass
 
 

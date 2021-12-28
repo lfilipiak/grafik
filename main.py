@@ -10,13 +10,15 @@ from employers import Employers
 from data import month_list, path
 import os
 import database
+#import hours
 
 
 def add_work_schedule():
     year = int(input("Podaj rok: "))
     month = int(input("Podaj miesiąc: "))
     if not os.path.isfile(path + '{} {}.xlsx'.format(year, month_list[month - 1])):
-        XLS.month_to_csv(year=year, month=month).save('{} {}.xlsx'.format(year, month_list[month - 1]))
+        XLS.month_to_csv(year=year, month=month).save(
+            '{} {}.xlsx'.format(year, month_list[month - 1]))
     else:
         print("taki grafik już istnieje!")
     pass
@@ -40,18 +42,31 @@ def delete_worker():
     pass
 
 
-def _list_of_workers():
-    list_of_workers = []
-
+def print_workers():
+    my_cursor = database.employers_db.cursor()
+    my_cursor.execute("SELECT * FROM Persons")
+    for x in enumerate(my_cursor.fetchall()):
+        print(x[0]+1, x[1][1:])
     pass
 
 
-# def delete_worker():
-#     x = input("Podaj nazwisko pracownika do usunięcia: ")
+# def add_hours():
+#     year = int(input("Podaj rok: "))
+#     month = int(input("Podaj miesiąc: "))
+#     if not os.path.isfile(path + '{} {}.xlsx'.format(year, month_list[month - 1])):
+#         raise ValueError("Brak takiego grafiku")
+#     else:
+#         hours.hours(year=year, month=month)
+#     pass
+
+
+def _list_of_workers():
+    list_of_workers = []
+    pass
 
 
 def menu():
-    print("1. Utwórz grafik\n2. Dodaj pracownika\n3. Edytuj grafik")
+    print("1. Utwórz grafik\n2. Dodaj pracownika\n3. Usuń pracownika\n4. Wyświetl listę pracowników")
     choice = int(input())
     match choice:
         case 1:
@@ -59,11 +74,13 @@ def menu():
         case 2:
             add_worker()
         case 3:
+            delete_worker()
+        case 4:
+            print_workers()
+        # case 5:
+        #     add_hours()
             pass
     pass
 
 
-
-delete_worker()
-# print("WYBIERZ FUNKCJĘ:")
-# menu()
+menu()
